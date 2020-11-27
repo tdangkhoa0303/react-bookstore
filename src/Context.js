@@ -107,6 +107,7 @@ export function Provider(props) {
         getBooks,
         addToCart,
         removeFromCart,
+        setCart,
         books,
         cart,
       }}

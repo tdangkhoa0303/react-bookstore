@@ -24,3 +24,14 @@ export const getCart = () => api.get("/cart");
 export const addToCart = (id) => api.get(`/cart/${id}/add`);
 
 export const removeFromCart = (id) => api.get(`/cart/${id}/remove`);
+
+export const getTransactions = () => api.get("/transactions/");
+
+export const createTransaction = () => api.get("/transactions/create");
+
+export const completeTransaction = (id) =>
+  api.get(`/transactions/${id}/complete`);
+
+export const postAvatar = (avatar) => api.post("/profile/avatar", avatar);
+
+export const createBook = (data) => api.post("/books/create", data);

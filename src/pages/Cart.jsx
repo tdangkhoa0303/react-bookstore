@@ -1,4 +1,7 @@
-import { useContext, Fragment } from "react";
+import { useContext, Fragment, useState } from "react";
+import { useHistory } from "react-router";
+import * as api from "../helpers/api";
+import { Link } from "react-router-dom";
 
 import {
   Table,
@@ -11,9 +14,10 @@ import {
   Typography,
   Button,
   Box,
-  Link,
+  Backdrop,
+  Link as StyledLink,
+  CircularProgress,
 } from "@material-ui/core";
-import { ArrowForward } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Context from "../Context";
@@ -32,12 +36,27 @@ const useStyles = makeStyles((theme) => ({
   create: {
     float: "right",
   },
+
+  backdrop: {
+    zIndex: 10,
+  },
 }));
 
 function Cart() {
-  const { cart, removeFromCart } = useContext(Context);
+  const { cart, removeFromCart, setCart } = useContext(Context);
+  const [loading, setLoading] = useState(false);
 
   const classes = useStyles();
+  const history = useHistory();
+  const { auth: isAuth } = useContext(Context);
+
+  const handleCreate = async (e) => {
+    if (!isAuth) history.push("/signIn");
+    setLoading(true);
+    const { data } = await api.createTransaction();
+    if (data.success) setCart([]);
+    setLoading(false);
+  };
 
   const renderRow = (row, index) => (
     <TableRow key={row._id}>
@@ -61,6 +80,9 @@ function Cart() {
   );
   return (
     <Container>
+      <Backdrop className={classes.backdrop} open={loading}>
+        <CircularProgress color="primary" />
+      </Backdrop>
       <Typography variant="h2">Cart</Typography>
       {cart.length ? (
         <Fragment>
@@ -81,7 +103,7 @@ function Cart() {
             </Table>
           </TableContainer>
           <Box mt={3} display="flex" justifyContent="flex-end">
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={handleCreate}>
               Create transaction
             </Button>
           </Box>
@@ -89,7 +111,9 @@ function Cart() {
       ) : (
         <Typography variant="subtitle1">
           You've not added any book,{" "}
-          <Link href="/">discover out library now!!</Link>
+          <StyledLink component={Link} to="/">
+            discover out library now!!
+          </StyledLink>
         </Typography>
       )}
     </Container>

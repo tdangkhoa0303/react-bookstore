@@ -1,7 +1,15 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { PrivateRoute, PublicRoute } from "./templates";
-import { SignIn, Home, SignUp, ForgotPassword, Cart } from "./pages";
+import {
+  SignIn,
+  Home,
+  SignUp,
+  ForgotPassword,
+  Profile,
+  Cart,
+  Transaction,
+} from "./pages";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 
@@ -31,6 +39,16 @@ function App() {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/cart" component={Cart} />
+              <Route
+                exact
+                path="/transactions"
+                component={() => <PrivateRoute Component={Transaction} />}
+              />
+              <Route
+                exact
+                path="/profile"
+                component={() => <PrivateRoute Component={Profile} />}
+              />
               <Route
                 exact
                 path="/signIn"

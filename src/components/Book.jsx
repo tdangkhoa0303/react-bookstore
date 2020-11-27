@@ -9,10 +9,12 @@ import {
 import { ShoppingCart } from "@material-ui/icons";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { Type } from "./";
 
 const useStyles = makeStyles((theme) => ({
   card: {
     boxShadow: "0px 4px 16px rgba(50, 50, 50, 0.1)",
+    position: "relative",
   },
 
   cart: {
@@ -64,6 +66,7 @@ function Book({ book, action, ActionIcon }) {
         >
           {ActionIcon ? <ActionIcon /> : <ShoppingCart />}
         </IconButton>
+        <Type type={book.type} />
       </CardContent>
     </Card>
   );
