@@ -46,7 +46,7 @@ function Home() {
 
   useEffect(() => {
     getBooks(page);
-  });
+  }, []);
 
   const renderBooks = (books) =>
     books
