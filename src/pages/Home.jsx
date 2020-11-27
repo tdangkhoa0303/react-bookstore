@@ -45,8 +45,8 @@ function Home() {
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
-    if (isAuth) getBooks(page);
-  }, [isAuth]);
+    getBooks(page);
+  });
 
   const renderBooks = (books) =>
     books

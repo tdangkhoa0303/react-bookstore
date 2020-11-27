@@ -62,7 +62,7 @@ function App() {
               <Route
                 exact
                 path="/signUp"
-                component={() => <PublicRoute Component={SignIn} />}
+                component={() => <PublicRoute Component={SignUp} />}
               />
             </Switch>
           </Router>

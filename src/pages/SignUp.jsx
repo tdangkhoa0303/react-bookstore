@@ -76,29 +76,9 @@ function SignUp() {
   const [error, setError] = useState("");
 
   const [fields, setFields] = useState({
-    firstName: {
-      label: "First name",
-      name: "firstName",
-      value: "",
-      validated: true,
-      default: "",
-      validator: "",
-      spacing: { xs: 12, md: 6 },
-      type: "text",
-    },
-    lastName: {
-      label: "Last name",
-      name: "lastName",
-      value: "",
-      validated: true,
-      default: "",
-      spacing: { xs: 12, md: 6 },
-      type: "text",
-    },
-
-    nickName: {
-      label: "Nickname",
-      name: "nickName",
+    userName: {
+      label: "Username",
+      name: "userName",
       value: "",
       validated: true,
       default: "",
@@ -133,25 +113,11 @@ function SignUp() {
       spacing: { xs: 12, md: 6 },
       validator: (value) => value === passwordRef.current,
     },
-    bio: {
-      label: "Bio",
-      name: "bio",
-      value: "",
-      validated: true,
-      default: "",
-      spacing: { xs: 12 },
-    },
   });
 
   useEffect(() => {
     passwordRef.current = fields.password.value;
   }, [fields.password.value]);
-
-  const [avatar, setAvatar] = useState(null);
-
-  const handleAvatarChange = (event) => {
-    setAvatar(event.target.files[0]);
-  };
 
   const handleFieldChange = (event, field) => {
     const value = event.target.value;
@@ -163,71 +129,14 @@ function SignUp() {
     }));
   };
 
-  const getActiveContent = (step) => {
-    switch (step) {
-      case 0:
-        return (
-          <form className={classes.form}>
-            <Grid container spacing={3}>
-              {Object.values(fields).map((field, index) => (
-                <Grid item {...field.spacing} key={index}>
-                  <TextField
-                    variant="outlined"
-                    label={field.label}
-                    id={field.name}
-                    name={field.name}
-                    className={classes.field}
-                    value={field.value}
-                    error={!field.validated}
-                    type={field.type}
-                    onChange={(e) => handleFieldChange(e, field)}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </form>
-        );
-      case 1:
-        return (
-          <Box>
-            <Typography paragraph>Choose your avatar</Typography>
-            <label htmlFor="avatar" className={classes.uploader}>
-              <Avatar
-                className={classes.avatar}
-                alt="avatar"
-                src={avatar && URL.createObjectURL(avatar)}
-              >
-                {fields.firstName ? fields.firstName.value[0] : "K"}
-              </Avatar>
-            </label>
-            <input
-              type="file"
-              id="avatar"
-              name="avatar"
-              onChange={handleAvatarChange}
-              hidden
-            />
-          </Box>
-        );
-      case 3:
-        return (
-          <Typography className={classes.instructions}>
-            We prepared all the things for you!
-          </Typography>
-        );
-      default:
-        return;
-    }
-  };
-
-  const handleSignUp = async () => {
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     try {
       const form = new FormData();
 
       Object.values(fields).forEach((field) =>
         form.append(field.name, field.value)
       );
-      form.append("avatar", avatar);
 
       const {
         data: { data: response },
@@ -238,87 +147,38 @@ function SignUp() {
       setError(err.message);
     }
   };
-
-  const handleNext = () => {
-    if (activeStep === steps.length - 1) {
-      handleSignUp();
-      return;
-    }
-    setActiveStep((prevStep) => prevStep + 1);
-  };
-  const handleBack = () => setActiveStep((prevStep) => prevStep - 1);
-
   const classes = useStyles();
-
-  const steps = [
-    {
-      label: "General",
-      isOptional: false,
-      isSkip: false,
-    },
-    {
-      label: "Avatar",
-      isOptional: false,
-      isSkip: false,
-    },
-    {
-      label: "Finish",
-      isOptional: false,
-      isSkip: false,
-    },
-  ];
 
   return (
     <Container className={classes.root}>
-      <Typography variant="h4" paragraph color="primary">
-        Join our community to connect new friend and share your stories...
-      </Typography>
-
-      <Stepper activeStep={activeStep} className={classes.stepper}>
-        {steps.map((step, index) => {
-          const stepProps = {};
-          const labelProps = {};
-          if (step.isOptional) {
-            labelProps.optional = (
-              <Typography variant="caption">Optional</Typography>
-            );
-          }
-          if (step.isSkip) {
-            stepProps.completed = false;
-          }
-          return (
-            <Step key={index} {...stepProps}>
-              <StepLabel {...labelProps}>{step.label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      <Box spacing={3}>
-        <Box>
-          {getActiveContent(activeStep)}
-          <Box className={classes.action}>
-            <Button
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              className={classes.backButton}
-            >
-              Back
+      <Box mt={8}>
+        <form className={classes.form} onSubmit={handleSignUp}>
+          <Typography variant="h4" paragraph color="primary">
+            Sign Up to access our premium services...
+          </Typography>
+          <Grid container spacing={3}>
+            {Object.values(fields).map((field, index) => (
+              <Grid item {...field.spacing} key={index}>
+                <TextField
+                  variant="outlined"
+                  label={field.label}
+                  id={field.name}
+                  name={field.name}
+                  className={classes.field}
+                  value={field.value}
+                  error={!field.validated}
+                  type={field.type}
+                  onChange={(e) => handleFieldChange(e, field)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" type="submit">
+              Sign Up
             </Button>
-            {activeStep < steps.length - 1 ? (
-              <Button variant="contained" color="primary" onClick={handleNext}>
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSignUp}
-              >
-                Let's start
-              </Button>
-            )}
           </Box>
-        </Box>
+        </form>
       </Box>
     </Container>
   );

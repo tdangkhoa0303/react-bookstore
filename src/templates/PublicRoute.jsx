@@ -9,11 +9,7 @@ function PrivateRoute({ Component }) {
     auth: { isAuth },
   } = useContext(Context);
 
-  return (
-    <Fragment>
-      {isAuth !== null && (isAuth ? <Redirect to="/" /> : <Component />)}
-    </Fragment>
-  );
+  return <Fragment>{isAuth ? <Redirect to="/" /> : <Component />}</Fragment>;
 }
 
 export default PrivateRoute;
