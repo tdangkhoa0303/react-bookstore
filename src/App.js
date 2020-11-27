@@ -1,23 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import { PrivateRoute, PublicRoute } from "./templates";
+import { SignIn, Home, SignUp, ForgotPassword, Cart } from "./pages";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { Box } from "@material-ui/core";
+
+import { AppBar } from "./components";
+
+import { Provider } from "./Context";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: "#6ec6ff",
+      main: "#2196f3",
+      dark: "#0069c0",
+      contrastText: "#fff",
+    },
+  },
+});
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ThemeProvider theme={theme}>
+        <Provider>
+          <Router>
+            <AppBar />
+            <Box mb={10} />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/cart" component={Cart} />
+              <Route
+                exact
+                path="/signIn"
+                component={() => <PublicRoute Component={SignIn} />}
+              />
+              <Route
+                exact
+                path="/signUp"
+                component={() => <PublicRoute Component={SignIn} />}
+              />
+            </Switch>
+          </Router>
+        </Provider>
+      </ThemeProvider>
     </div>
   );
 }
