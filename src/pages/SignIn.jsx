@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import {
   Grid,
   TextField,
-  Link,
+  Link as StyledLink,
   Button,
   Typography,
   Box,
@@ -107,9 +108,9 @@ function SignIn() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Link href="/whereismypassword">
+                <StyledLink to="/whereismypassword " component={Link}>
                   Forgot password? Follow me...
-                </Link>
+                </StyledLink>
               </Grid>
               <Grid item xs={12}>
                 <Button variant="contained" color="primary" type="submit">

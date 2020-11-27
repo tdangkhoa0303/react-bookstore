@@ -6,7 +6,7 @@ function Type({ className, type = "rent" }) {
   const useStyles = makeStyles((theme) => ({
     type: {
       position: "absolute",
-      top: 0,
+      bottom: theme.spacing(2),
       background: fade(
         theme.palette[type === "rent" ? "primary" : "secondary"].light,
         0.9
@@ -14,7 +14,7 @@ function Type({ className, type = "rent" }) {
       color: "#ffffff",
       borderRadius: theme.spacing(0, 0, 1, 0),
       left: 0,
-      padding: theme.spacing(1, 2, 1, 1.5),
+      padding: theme.spacing(0.5, 2, 0.5, 1.5),
     },
   }));
 
@@ -22,7 +22,7 @@ function Type({ className, type = "rent" }) {
 
   return (
     <span className={clsx([classes.type, className])}>
-      <Typography variant="body1">{type}</Typography>
+      <Typography variant="body2">{type}</Typography>
     </span>
   );
 }

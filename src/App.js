@@ -56,6 +56,11 @@ function App() {
               />
               <Route
                 exact
+                path="/whereismypassword"
+                component={() => <PublicRoute Component={ForgotPassword} />}
+              />
+              <Route
+                exact
                 path="/signUp"
                 component={() => <PublicRoute Component={SignIn} />}
               />

@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import { PhotoCamera } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
+import { Book } from "../components";
 
 import Context from "../Context";
 
@@ -56,6 +57,20 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
     },
   },
+  status: {
+    color: "#ffffff",
+  },
+
+  header: {
+    background: `url("/images/reading_book.svg")`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "contain",
+    backgroundPosition: "right center",
+
+    [theme.breakpoints.down["md"]]: {
+      background: "none",
+    },
+  },
 
   field: {
     width: "100%",
@@ -66,6 +81,7 @@ function Profile() {
   const {
     auth: { user },
     setAuth,
+    addToCart,
   } = useContext(Context);
 
   const [avatar, setAvatar] = useState(user.avatarUrl);
@@ -100,6 +116,15 @@ function Profile() {
       [field.name]: { ...field, validated, value },
     }));
   };
+
+  const renderBooks = (books) =>
+    books
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .map((book) => (
+        <Grid item xs={6} md={4} xl={3} key={book._id}>
+          <Book book={book} action={addToCart} />
+        </Grid>
+      ));
 
   const handleCoverChange = (event) => setCover(event.target.files[0]);
 
@@ -142,7 +167,7 @@ function Profile() {
       <Box mt={15}>
         {user && (
           <Fragment>
-            <Box display="flex" mb={8}>
+            <Box display="flex" mb={8} className={classes.header}>
               <Box className={classes.avatarContainer}>
                 <Avatar
                   src={avatar}
@@ -166,16 +191,13 @@ function Profile() {
                 <Typography variant="h2" className={classes.userName}>
                   {user.userName}
                 </Typography>
-                {/* <Typography variant="subtitle1" gutterBottom>
-                    <b>{user.posts.length}</b>&nbsp;
-                    {user.posts.length > 1 ? "posts" : "post"}
-                  </Typography> */}
+                <Typography variant="subtitle1" gutterBottom>
+                  <b>{user.books.length}</b>&nbsp;
+                  {user.books.length > 1 ? "books" : "book"}
+                </Typography>
                 <Typography variant="subtitle1" gutterBottom>
                   {user.email}
                 </Typography>
-                <Button variant="contained" color="primary">
-                  Edit
-                </Button>
               </Box>
             </Box>
             <Box>
@@ -214,7 +236,11 @@ function Profile() {
                 </Box>
               </form>
             </Box>
-            <Grid container spacing={2}></Grid>
+            <Box mt={2}>
+              <Grid container spacing={3}>
+                {user.books && renderBooks(user.books)}
+              </Grid>
+            </Box>
           </Fragment>
         )}
         <input
